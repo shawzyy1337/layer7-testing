@@ -17,6 +17,7 @@ if (process.argv.length < 8) {
 
 let randomparam = true;
 var proxies = fs.readFileSync(process.argv[6], "utf-8").toString().replace(/\r/g, "").split("\n");
+var numProxies = proxies.length;
 var rate = process.argv[7];
 var target_url = process.argv[2];
 const target = target_url.split('""')[0];
@@ -92,7 +93,7 @@ if (headerbuilders !== undefined) {
         for (let i = 0; i < process.argv[7]; i++) {
             cluster.fork();
         };
-        console.log("[INFO] Started.");
+        console.log("[INFO] Started with " + numProxies + " loaded proxies.");
         setTimeout(() => {
             process.exit(1);
         }, process.argv[3] * 1e3);
@@ -125,7 +126,7 @@ if (headerbuilders !== undefined) {
         for (let i = 0; i < process.argv[7]; i++) {
             cluster.fork();
         };
-        console.log("[INFO] Started.");
+        console.log("[INFO] Started with " + numProxies + " loaded proxies and no Custom-HeaderData.");
 
         setTimeout(() => {
             process.exit(1);
