@@ -116,15 +116,51 @@ if (headerbuilders !== undefined) {
   };
 
   if (cluster.isMaster) {
-    for (let i = 0; i < process.argv[7]; i++) {
-      cluster.fork();
-    }
-    console.log("[INFO] Started with " + numProxies + " loaded proxies and no Custom-HeaderData.");
+  for (let i = 0; i < process.argv[7]; i++) {
+    cluster.fork();
+  }
 
+  const numProxies = proxies.length;
+  const loadingMessage = "[INFO] Started with " + numProxies + " loaded proxies and no Custom-HeaderData.";
+  const duration = process.argv[3] * 1e3;
+
+  const clearConsole = () => {
+    process.stdout.write('\033c');
+  };
+
+  const showMessage = () => {
+    console.log(loadingMessage);
+  };
+
+  const exitProcess = () => {
+    process.exit(1);
+  };
+
+  const startAttack = () => {
+    clearConsole();
+    showMessage();
+    setTimeout(exitProcess, duration);
+  };
+
+  const smoothAnimation = () => {
+    const frames = ["|", "/", "-", "\\"];
+    let currentFrame = 0;
+
+    const animate = () => {
+      clearConsole();
+      process.stdout.write(frames[currentFrame]);
+      currentFrame = (currentFrame + 1) % frames.length;
+    };
+
+    const interval = setInterval(animate, 100);
     setTimeout(() => {
-      process.exit(1);
-    }, process.argv[3] * 1e3);
-  } else {
+      clearInterval(interval);
+      startAttack();
+    }, 1000);
+  };
+
+  smoothAnimation();
+}else {
     startFlood();
   }
 }
